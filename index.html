@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookTrack - Sistem Informasi Perpustakaan</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">B</div>
+                <div>
+                    <h2>BookTrack</h2>
+                    <small>Library Management</small>
+                </div>
+            </div>
+
+            <div class="menu-label">MENU UTAMA</div>
+
+            <nav>
+                <a href="#" class="menu-item active" data-page="dashboard">
+                    <span>▦</span> Dashboard
+                </a>
+
+                <a href="#" class="menu-item" data-page="books">
+                    <span>▤</span> Data Buku
+                </a>
+
+                <a href="#" class="menu-item" data-page="members">
+                    <span>♙</span> Data Anggota
+                </a>
+
+                <a href="#" class="menu-item" data-page="loans">
+                    <span>⇄</span> Peminjaman
+                </a>
+
+                <a href="#" class="menu-item" data-page="returns">
+                    <span>↩</span> Pengembalian
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="profile-avatar">A</div>
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Admin Perpustakaan</small>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <h2 id="page-title">Dashboard</h2>
+                    <p>Selamat datang di sistem informasi perpustakaan.</p>
+                </div>
+                <div class="date" id="current-date"></div>
+            </header>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard-page" class="page active">
+
+                <div class="welcome-card">
+                    <div>
+                        <h2>Selamat Datang di BookTrack 👋</h2>
+                        <p>Kelola koleksi buku dan aktivitas perpustakaan dengan mudah.</p>
+                    </div>
+                    <div class="welcome-icon">📚</div>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-icon blue">📚</div>
+                        <p>Total Buku</p>
+                        <h2 id="total-books">0</h2>
+                        <small>Jumlah stok buku</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">👥</div>
+                        <p>Total Anggota</p>
+                        <h2 id="total-members">0</h2>
+                        <small>Anggota terdaftar</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">📖</div>
+                        <p>Sedang Dipinjam</p>
+                        <h2 id="total-loans">0</h2>
+                        <small>Belum dikembalikan</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">↩</div>
+                        <p>Total Pengembalian</p>
+                        <h2 id="total-returns">0</h2>
+                        <small>Buku telah dikembalikan</small>
+                    </div>
+
+                </div>
+
+                <div class="content-card">
+                    <div class="section-heading">
+                        <div>
+                            <h3>Koleksi Buku Terbaru</h3>
+                            <p>Daftar buku yang tersedia di perpustakaan.</p>
+                        </div>
+
+                        <button class="primary-btn" onclick="showPage('books')">
+                            Lihat Semua Buku →
+                        </button>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Judul Buku</th>
+                                    <th>Penulis</th>
+                                    <th>Kategori</th>
+                                    <th>Stok</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-book-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- DATA BUKU -->
+            <section id="books-page" class="page">
+                <div class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Manajemen Data Buku</h3>
+                            <p>Kelola koleksi buku perpustakaan.</p>
+                        </div>
+
+                        <button class="primary-btn" onclick="openBookModal()">
+                            + Tambah Buku
+                        </button>
+                    </div>
+
+                    <input type="text" id="search-book" class="search-input"
+                        placeholder="Cari judul, kode, atau penulis buku...">
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Judul Buku</th>
+                                    <th>Penulis</th>
+                                    <th>Kategori</th>
+                                    <th>Stok</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="book-list"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- DATA ANGGOTA -->
+            <section id="members-page" class="page">
+                <div class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Data Anggota</h3>
+                            <p>Kelola informasi anggota perpustakaan.</p>
+                        </div>
+
+                        <button class="primary-btn" onclick="openMemberModal()">
+                            + Tambah Anggota
+                        </button>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>No. Telepon</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="member-list"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- PEMINJAMAN -->
+            <section id="loans-page" class="page">
+                <div class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Transaksi Peminjaman</h3>
+                            <p>Daftar peminjaman buku oleh anggota.</p>
+                        </div>
+
+                        <button class="primary-btn" onclick="openLoanModal()">
+                            + Pinjam Buku
+                        </button>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Anggota</th>
+                                    <th>Buku</th>
+                                    <th>Tanggal Pinjam</th>
+                                    <th>Jatuh Tempo</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loan-list"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- PENGEMBALIAN -->
+            <section id="returns-page" class="page">
+                <div class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Riwayat Pengembalian</h3>
+                            <p>Daftar transaksi buku yang telah dikembalikan.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID Peminjaman</th>
+                                    <th>Anggota</th>
+                                    <th>Buku</th>
+                                    <th>Tanggal Kembali</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="return-list"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODAL BUKU -->
+    <div class="modal" id="book-modal">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 id="book-modal-title">Tambah Buku</h3>
+                <button class="close-btn" onclick="closeModal('book-modal')">×</button>
+            </div>
+
+            <form id="book-form">
+                <input type="hidden" id="book-id">
+
+                <label>Kode Buku</label>
+                <input id="book-code" required placeholder="Contoh: BK001">
+
+                <label>Judul Buku</label>
+                <input id="book-title" required placeholder="Judul buku">
+
+                <label>Penulis</label>
+                <input id="book-author" required placeholder="Nama penulis">
+
+                <label>Kategori</label>
+                <input id="book-category" required placeholder="Contoh: Teknologi">
+
+                <label>Stok</label>
+                <input id="book-stock" type="number" min="0" required>
+
+                <button type="submit" class="primary-btn full-btn">
+                    Simpan Buku
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- MODAL ANGGOTA -->
+    <div class="modal" id="member-modal">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 id="member-modal-title">Tambah Anggota</h3>
+                <button class="close-btn" onclick="closeModal('member-modal')">×</button>
+            </div>
+
+            <form id="member-form">
+                <input type="hidden" id="member-id">
+
+                <label>Nama Lengkap</label>
+                <input id="member-name" required placeholder="Nama lengkap">
+
+                <label>Email</label>
+                <input id="member-email" type="email" required placeholder="nama@email.com">
+
+                <label>No. Telepon</label>
+                <input id="member-phone" type="tel" required placeholder="08xxxxxxxxxx">
+
+                <button type="submit" class="primary-btn full-btn">
+                    Simpan Anggota
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- MODAL PEMINJAMAN -->
+    <div class="modal" id="loan-modal">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3>Peminjaman Buku</h3>
+                <button class="close-btn" onclick="closeModal('loan-modal')">×</button>
+            </div>
+
+            <form id="loan-form">
+
+                <label>Anggota</label>
+                <select id="loan-member" required></select>
+
+                <label>Buku</label>
+                <select id="loan-book" required></select>
+
+                <label>Tanggal Peminjaman</label>
+                <input type="date" id="loan-date" required>
+
+                <label>Lama Peminjaman (Hari)</label>
+                <input type="number" id="loan-duration" min="1" max="30" value="7" required>
+
+                <button type="submit" class="primary-btn full-btn">
+                    Simpan Peminjaman
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
